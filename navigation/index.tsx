@@ -9,6 +9,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
+import { useRecoilState } from 'recoil';
 import { Icon } from 'react-native-eva-icons';
 
 import Colors from '../constants/Colors';
@@ -19,6 +20,16 @@ import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import { cartState } from "../App";
+
+interface Product {
+  productId: number;
+  name: string;
+  subtitle: string;
+  price: number;
+  amount: number;
+  image?: string;
+}
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -56,6 +67,15 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const [cart, setCart] = useRecoilState(cartState);
+
+  const getTotalPrice = (cart: Product[]) => {
+    const prices = cart.map((product) => {
+      return product.amount * product.price;
+    })
+    const reducer = (total: number, currentValue: number) => total + currentValue;
+    return prices.length === 0 ? 0 : prices.reduce(reducer).toFixed(2)
+  }
 
   return (
     <BottomTab.Navigator
@@ -86,6 +106,7 @@ function BottomTabNavigator() {
         options={{
           title: 'Cart',
           tabBarIcon: ({ color }) => <Icon name="shopping-cart-outline" fill={color} width={28} height={28} />,
+          tabBarBadge: getTotalPrice(cart.map(product => product))
         }}
       />
     </BottomTab.Navigator>
