@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { Text, View } from '../components/Themed';
+import ProductListItem from '../components/ProductListItem';
 import { cartState } from "../App";
 
 export default function CartScreen() {
@@ -9,10 +10,7 @@ export default function CartScreen() {
   return (
     <View style={styles.container}>
       {cart.map((item) => (
-        <View key={item.productId}>
-          <Text>{item.name}</Text>
-          <Text>price: {item.price} amount: {item.amount}</Text>
-        </View>
+        <ProductListItem key={item.productId} product={item} />
       ))}
 
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
@@ -23,8 +21,8 @@ export default function CartScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     backgroundColor: '#f1f1f1',
   },
   title: {

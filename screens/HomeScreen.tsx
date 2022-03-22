@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   const getProductsFromCMS = async () => {
     try {
-      const response = await fetch('https://simplejsoncms.com/api/mcom0lgd158');
+      const response = await fetch('https://simplejsoncms.com/api/1yw8dxjfcjj');
       const json = await response.json();
       setProducts(json.products);
       return json.products;
@@ -69,11 +69,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f1f1f1',
-    padding: 10
   },
   productContainer: {
     backgroundColor: '#f1f1f1',
     marginTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 20
   },
   product: {
     width: '50%',
