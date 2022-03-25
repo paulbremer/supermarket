@@ -33,7 +33,7 @@ const ProductListItem = ({ product }: { product: Product }) => {
                     <Text style={{ ...styles.productSubtitleText, color: Colors[colorScheme].tint}}>{product.subtitle}</Text>
                 </View>
                 <View style={styles.productPrice}>
-                    <Text style={styles.productPriceText}>{product.price}</Text>
+                    <Text style={styles.productPriceText}>{product.amount * product.price}</Text>
                 </View>
             </View>
         </View>
