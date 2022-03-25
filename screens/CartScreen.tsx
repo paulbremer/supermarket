@@ -1,37 +1,57 @@
-import { StyleSheet } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { Text, View } from '../components/Themed';
-import ProductListItem from '../components/ProductListItem';
+import { FlatList, StyleSheet } from "react-native";
+import { useRecoilState } from "recoil";
+import { Text, View } from "../components/Themed";
+import ProductListItem from "../components/ProductListItem";
 import { cartState } from "../App";
+import getTotalCartPrice from "../utils/getTotalCartPrice";
 
 export default function CartScreen() {
-  const [cart, setCart] = useRecoilState(cartState);
+    const [cart, setCart] = useRecoilState(cartState);
 
-  return (
-    <View style={styles.container}>
-      {cart.map((item) => (
-        <ProductListItem key={item.productId} product={item} />
-      ))}
+    const FooterList = () => {
+        return (
+            <View style={styles.footerList}>
+                <Text style={styles.footerListText}>Totaal</Text>
+                <Text style={styles.footerListText}>{getTotalCartPrice(cart)}</Text>
+            </View>
+        );
+    };
 
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <FlatList
+                data={cart}
+                renderItem={({ item }) => <ProductListItem key={item.productId} product={item} />}
+                keyExtractor={(item) => item.name}
+                ListFooterComponent={FooterList}
+            />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    backgroundColor: '#f1f1f1',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+    separator: {
+        marginVertical: 30,
+        height: 1,
+        width: "80%",
+    },
+    footerList: {
+        width: "100%",
+        paddingHorizontal: 20,
+        paddingVertical: 30,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    footerListText: {
+        fontWeight: "600",
+        fontSize: 18
+    },
 });
