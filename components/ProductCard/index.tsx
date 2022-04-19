@@ -1,8 +1,13 @@
-import { Image, StyleSheet, View } from "react-native";
-import { Text } from "../Themed";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-eva-icons";
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { Text } from "../Themed";
 
 const staticImage = require("../../data/dummy/product-image.jpeg");
+
+interface RouterProps {
+    navigation: NavigationProp<any, any>;
+}
 
 interface Product {
     productId: number;
@@ -19,6 +24,8 @@ const getPrice = (value: number, option: "price" | "decimal") => {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
+    const navigation = useNavigation<RouterProps>();
+
     return (
         <View style={styles.container}>
             <View>
@@ -33,7 +40,9 @@ export default function ProductCard({ product }: { product: Product }) {
             </View>
 
             <View style={styles.footer}>
-                <Icon name="info-outline" fill="#999" width={24} height={24} />
+                <TouchableOpacity onPress={() => navigation.navigate('Product', { product })}>
+                    <Icon name="info-outline" fill="#999" width={24} height={24} />
+                </TouchableOpacity>
                 <View style={styles.priceContainer}>
                     <Text style={styles.price}>{getPrice(product.price, "price")}.</Text>
                     <Text style={styles.priceDecimal}>{getPrice(product.price, "decimal")}</Text>
