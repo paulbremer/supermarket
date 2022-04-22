@@ -1,7 +1,10 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-eva-icons";
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useRecoilState } from "recoil";
 import { Text } from "../Themed";
+import ProductPrice from '../ProductPrice';
+import { cartState } from "../../App";
 
 const staticImage = require("../../data/dummy/product-image.jpeg");
 
@@ -9,22 +12,10 @@ interface RouterProps {
     navigation: NavigationProp<any, any>;
 }
 
-interface Product {
-    productId: number;
-    name: string;
-    subtitle: string;
-    price: number;
-    amount: number;
-    imageUrl?: string;
-}
-
-const getPrice = (value: number, option: "price" | "decimal") => {
-    const [price, decimal] = value.toString().split(".");
-    return option === "price" ? price : decimal;
-};
-
 export default function ProductCard({ product }: { product: Product }) {
     const navigation = useNavigation<RouterProps>();
+    const [cart, setCart] = useRecoilState(cartState);
+    const updatedProduct = cart.find(cartProduct => cartProduct.productId === product.productId);
 
     return (
         <View style={styles.container}>
@@ -33,6 +24,11 @@ export default function ProductCard({ product }: { product: Product }) {
                     <Image style={styles.productImage} source={{uri: product.imageUrl}} />
                 ) : (
                     <Image style={styles.productImage} source={staticImage} />
+                )}
+                {updatedProduct?.amount > 0 && (
+                    <View style={styles.amountTextContainer}>
+                        <Text style={styles.amountText}>{updatedProduct?.amount}</Text>
+                    </View>
                 )}
 
                 <Text style={styles.title}>{product.name}</Text>
@@ -43,10 +39,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 <TouchableOpacity onPress={() => navigation.navigate('Product', { product })}>
                     <Icon name="info-outline" fill="#999" width={24} height={24} />
                 </TouchableOpacity>
-                <View style={styles.priceContainer}>
-                    <Text style={styles.price}>{getPrice(product.price, "price")}.</Text>
-                    <Text style={styles.priceDecimal}>{getPrice(product.price, "decimal")}</Text>
-                </View>
+                <ProductPrice price={product.price} />
             </View>
         </View>
     );
@@ -69,6 +62,18 @@ const styles = StyleSheet.create({
         height: 120,
         marginBottom: 10,
     },
+    amountTextContainer: {
+        position: "absolute",
+        top: 100,
+        backgroundColor: "#1d1d1d",
+        borderRadius: 4,
+        paddingHorizontal: 4,
+        alignSelf: "flex-start"
+    },
+    amountText: {
+        color: "#fff",
+        fontSize: 14,
+    },
     title: {
         fontSize: 16,
         minHeight: 38,
@@ -81,19 +86,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         flexDirection: "row",
         justifyContent: "space-between",
-    },
-    priceContainer: {
-        flexDirection: "row",
-        alignItems: "flex-start",
-    },
-    price: {
-        fontSize: 20,
-        fontWeight: "bold",
-    },
-    priceDecimal: {
-        fontSize: 14,
-        fontWeight: "bold",
-        marginTop: 1,
     },
     separator: {
         marginVertical: 30,

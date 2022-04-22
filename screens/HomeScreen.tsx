@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { View } from '../components/Themed';
 import ProductCard from '../components/ProductCard';
 import { cartState } from "../App";
-
-interface Product {
-  productId: number;
-  name: string;
-  subtitle: string;
-  price: number;
-  amount: number;
-  image?: string;
-}
 
 export default function HomeScreen() {
   const [cart, setCart] = useRecoilState(cartState);
@@ -46,7 +37,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <FlatList
           data={products}
           renderItem={({ item }) => (
@@ -59,7 +50,7 @@ export default function HomeScreen() {
           horizontal={false}
           numColumns={2}
         />
-    </View>
+    </SafeAreaView>
   );
 }
 
