@@ -1,8 +1,9 @@
-import { Pressable, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
 import { Text, View } from "../components/Themed";
 import ProductPrice from "../components/ProductPrice";
+import CustomButton from "../components/CustomButton";
 import { cartState } from "../App";
 
 const staticImage = require("../data/dummy/product-image.jpeg");
@@ -49,9 +50,7 @@ export default function ProductScreen({ route, navigation }: RouteProp) {
 
                 <ProductPrice price={product.price} fontSize={32} />
 
-                <Pressable onPress={() => onProductPress(product)} style={styles.button}>
-                    <Text style={styles.buttonText}>Toevoegen</Text>
-                </Pressable>
+                <CustomButton onPress={() => onProductPress(product)} title="Toevoegen" />
             </View>
         </View>
     );
@@ -96,22 +95,5 @@ const styles = StyleSheet.create({
     productSubtitle: {
         fontSize: 18,
         marginBottom: 16,
-    },
-    button: {
-        marginTop: 32,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: "black",
-    },
-    buttonText: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: "bold",
-        letterSpacing: 0.25,
-        color: "white",
     },
 });

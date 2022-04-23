@@ -111,7 +111,7 @@ function BottomTabNavigator() {
                 name="Cart"
                 component={CartScreen}
                 options={{
-                    title: "Cart",
+                    title: "Winkelmand",
                     tabBarIcon: ({ color }) => (
                         <Icon name="shopping-cart-outline" fill={color} width={28} height={28} />
                     ),

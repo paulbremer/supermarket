@@ -1,42 +1,41 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
-interface Product {
-    productId: number;
-    name: string;
-    subtitle: string;
-    price: number;
-    amount: number;
-    imageUrl?: string;
+interface RouterProps {
+    navigation: NavigationProp<any, any>;
 }
 
 const staticImage = require("../../data/dummy/product-image.jpeg");
 
 const ProductListItem = ({ product }: { product: Product }) => {
     const colorScheme = useColorScheme();
+    const navigation = useNavigation<RouterProps>();
 
     return (
-        <View key={product.productId} style={styles.container}>
-            <View style={styles.listItem}>
-                <View style={styles.productAmount}>
-                    <Text style={styles.productAmountText}>{product.amount}</Text>
-                </View>
-                <View>
-                    {product.imageUrl ? (
-                        <Image style={styles.productImage} source={{uri: product.imageUrl}} />
-                    ) : (
-                        <Image style={styles.productImage} source={staticImage} />
-                    )}
-                </View>
-                <View style={styles.productTitle}>
-                    <Text style={styles.productTitleText} ellipsizeMode='tail' numberOfLines={2}>{product.name}</Text>
-                    <Text style={{ ...styles.productSubtitleText, color: Colors[colorScheme].tint}}>{product.subtitle}</Text>
-                </View>
-                <View style={styles.productPrice}>
-                    <Text style={styles.productPriceText}>{(product.amount * product.price).toFixed(2)}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Product', { product })}>
+            <View key={product.productId} style={styles.container}>                
+                <View style={styles.listItem}>
+                    <View style={styles.productAmount}>
+                        <Text style={styles.productAmountText}>{product.amount}</Text>
+                    </View>
+                    <View>
+                        {product.imageUrl ? (
+                            <Image style={styles.productImage} source={{uri: product.imageUrl}} />
+                        ) : (
+                            <Image style={styles.productImage} source={staticImage} />
+                        )}
+                    </View>
+                    <View style={styles.productTitle}>
+                        <Text style={styles.productTitleText} ellipsizeMode='tail' numberOfLines={2}>{product.name}</Text>
+                        <Text style={{ ...styles.productSubtitleText, color: Colors[colorScheme].tint}}>{product.subtitle}</Text>
+                    </View>
+                    <View style={styles.productPrice}>
+                        <Text style={styles.productPriceText}>{(product.amount * product.price).toFixed(2)}</Text>
+                    </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
